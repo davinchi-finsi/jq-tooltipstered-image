@@ -1,12 +1,12 @@
 {
   "name": "jq-tooltipstered-image",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/jq-tooltipstered-image.js",
   "scripts": {
-    "demo":"gulp --demo",
-    "dev":"gulp",
-    "dist":"gulp dist --production",
+    "demo": "gulp --demo",
+    "dev": "gulp",
+    "dist": "gulp dist --production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
