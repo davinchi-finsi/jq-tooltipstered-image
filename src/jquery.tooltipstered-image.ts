@@ -21,7 +21,8 @@
             waiting:0,
             current:1,
             active:2,
-            completed:3
+            completed:3,
+            open:4
         },
         options:{
             classes:{
@@ -31,6 +32,7 @@
                 active:"tooltipstered-image__step--active",
                 completed:"tooltipstered-image__step--completed",
                 disabled:"tooltipstered-image__step--disabled",
+                open:"tooltipstered-image__step--open"
             },
             tooltip:{
 
@@ -45,6 +47,7 @@
         },
         _create:function(){
             this.refresh();
+            this.element.addClass(this.options.classes.main);
             this._registerTooltipEvents();
         },
         /**
@@ -216,11 +219,16 @@
                 this.options.registerTooltipEvents.call(this,this._onTooltipOpening.bind(this),this._onTooltipClose.bind(this));
             }else{
                 let tooltip = this.element.data(this.element.data("tooltipsterNs")[0]);
-                tooltip.on("startend",this._onTooltipOpening.bind(this));
-                tooltip.on("closing",this._onTooltipClose.bind(this));
+                tooltip.on("state",this._onTooltipsterStateChange.bind(this));
             }
         },
-
+        _onTooltipsterStateChange:function(e){
+            if(e.state == "appearing"){
+                this._onTooltipOpening();
+            }else if (e.state == "closed"){
+                this._onTooltipClose();
+            }
+        },
         /**
          * Enable the tooltip
          * If the enableTooltip option is provided it will be used instead of the default behavior.
@@ -252,6 +260,7 @@
         _onTooltipOpening:function(){
             if(this.options.disabled != true) {
                 this._setState(this.STATES.active);
+                this.element.addClass(this.options.classes.open);
             }
         },
         /**
@@ -259,9 +268,12 @@
          * @private
          */
         _onTooltipClose:function(){
-            if(this.options.disabled != true && this._currentState != this.STATES.completed) {
-                this._setState(this.STATES.completed);
-                this.element.trigger(this.ON_COMPLETED);
+            if(this.options.disabled != true) {
+                this.element.removeClass(this.options.classes.open);
+                if(this._currentState != this.STATES.completed) {
+                    this._setState(this.STATES.completed);
+                    this.element.trigger(this.ON_COMPLETED);
+                }
             }
 
         },
@@ -353,10 +365,12 @@
             this._svgContext = SVG(this.element.get(0)).size("100%","100%");
             if(this.options.viewbox){
                 this._applySvgViewbox(this.options.viewbox);
-                this._applySvgAttrs(this.options.svgAttr);
-                let promise = this._loadSvgFile();
-                promise.then(this._onProcessedSvgFile.bind(this,defer));
             }
+            if(this.options.svgAttr) {
+                this._applySvgAttrs(this.options.svgAttr);
+            }
+            let promise = this._loadSvgFile();
+            promise.then(this._onProcessedSvgFile.bind(this,defer));
             return defer.promise();
         },
         /**
@@ -482,20 +496,30 @@
             //this is the element that fires the event
             let instance = e.data.instance;
             instance._completed++;
-            instance._checkCompleted();
+            if(!instance._checkCompleted()){
+                instance._runNextStep();
+            }
+        },
+        _runNextStep(){
+            if(this.options.sequential === true){
+                this._steps[this._completed].stepInstance.run();
+            }
         },
         /**
          * Check if the widget is completed
          * @private
          */
         _checkCompleted:function(){
+            let result = false;
             if(this._completed == this._steps.length){
+                result = true;
                 if(this.options.autoStop == true) {
                     this.stop();
                 }
                 this.element.addClass(this.options.classes.completed);
                 this.element.trigger(this.ON_COMPLETED);
             }
+            return result;
         },
         /**
          * Stop the widget. The tooltips won't be opened

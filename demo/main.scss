@@ -4,6 +4,48 @@
 //* Description:
 //*********************************************
 /* main */
-
-
+@-webkit-keyframes tip {
+    0%{
+        stroke-opacity: 0.4;
+        stroke-width: 2;
+    }
+    50%{
+        stroke-opacity: 1;
+        stroke-width: 4;
+    }
+    100%{
+        stroke-opacity: 0.4;
+        stroke-width: 2;
+    }
+}
+.tooltipstered-image__step{
+    /*Override inline properties*/
+    stroke: #cb7b00;
+    stroke-width: 2;
+    stroke-dasharray: 5,5;
+    stroke-opacity: 0.4;
+    transition:all 400ms ease;
+    &.tooltipstered-image__step--current{
+        animation:tip 1s linear infinite;
+    }
+    &.tooltipstered-image__step--completed{
+        stroke-dasharray: none;
+        stroke: #00ff00;
+        stroke-opacity: 0.6;
+    }
+    &.tooltipstered-image__step--open{
+        stroke-opacity: 1;
+    }
+}
+.tooltipstered-image{
+    width:20%;
+}
+.tooltipster-template{
+    display: none;
+}
+.tooltipster-base{
+    .tooltipster-template{
+        display: inherit;
+    }
+}
 /* End main */

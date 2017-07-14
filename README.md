@@ -11,7 +11,7 @@ Dependencies
 ```npm i -s jquery jquery-ui-dist svg.js tooltipster```
 
 ### Download
-You could download the last version [here]().
+You could download the last version [here](https://github.com/davinchi-finsi/jq-tooltipstered-image/releases).
 
 ## Dependencies
 - JQuery
@@ -47,14 +47,14 @@ jq-tooltipstered-image could be used in two ways:
 ### 1. Include the dependencies scripts
 ```html
     <!--Tooltipster is optional, you could use your favourite tooltip library-->
-    <link rel="stylesheet" type="text/css" href="tooltipster/dist/css/tooltipster.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.2.5/css/tooltipster.bundle.min.css" />
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!--You could include only the widget file or your custom build of jquery ui-->
     <script type="text/javascript" src="jq-tooltipstered-image/dist/libs/jquery-ui/widget.min.js"></script>
-    <script type="text/javascript" src="tooltipster/dist/js/tooltipster.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.tooltipster/4.2.5/js/tooltipster.bundle.min.js"></script>
     <!--In order to work properly with svg is necessary include the svg plugin for tooltipster-->
-    <script type="text/javascript" src="tooltipster/dist/js/plugins/tooltipster/SVG/tooltipster-SVG.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.tooltipster/4.2.5/js/plugins/tooltipster/SVG/tooltipster-SVG.min.js"></script>
     <script type="text/javascript" src=" https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.2/svg.min.js"></script>
     <script type="text/javascript" src="jq-tooltipstered-image/dist/jquery.tooltipstered-image.min.js"></script>
 ```
@@ -151,7 +151,7 @@ $("#myImageMap").tooltipsteredImage(
 | autoStop | boolean | false | false |Once all the tooltips are shown, the widget could be stopped disabling the re opening of the tooltips. |
 | initialized | function | null | false | A callback that will be executed after load the svg file and process the shapes |
 
-```json
+```typescript
 {
     classes:{
         main:"tooltipstered-image",
@@ -185,14 +185,15 @@ The options could be provided in the `items` option of jq-tooltipstered-image
 | registerTooltipEvents | function | null | Custom function to register the events of the tooltip. The function reciebes two callbacks to invoke, onOpeningCallback and onClosedCallback |
 | destroyTooltip | function | null | Custom function to manage the initializing of the tooltip. If it's provided, disableTooltip, enableTooltip and registerTooltipEvents options must be provided as well |
 
-```json
+```typescript
 {
     classes:{
         main:"tooltipstered-image__step", //class to the root element
         waiting:"tooltipstered-image__step--waiting", // class added when the step is waiting and is disabled
-        current:"tooltipstered-image__step--current", // class added when the step is the current step but when the tooltip hasn't be opened yet
-        active:"tooltipstered-image__step--active", // class added when the tooltip of the step is opened
-        completed:"tooltipstered-image__step--completed", // class added when the tooltip of the step is closed and completed
+        current:"tooltipstered-image__step--current", // class added when the step is the current but the tooltip hasn't be opened yet
+        active:"tooltipstered-image__step--active", // class added when the step is the current and the tooltip of the step is opened
+        completed:"tooltipstered-image__step--completed", // class added when the step is the current and the tooltip is closed
+        open:"tooltipstered-image__step--open", // class added when the tooltip is open
         disabled:"tooltipstered-image__step--disabled" // class added when the tooltip is disabled in any state
     },
     tooltip:{},//Options for the tooltip
@@ -270,5 +271,32 @@ $("#myImageMap").tooltipsteredImage(
 ## Sequentially
 jq-tooltipstered-image could be used sequentially, requiring to the user to open the tooltips in the order in which they have been registered.\
 The tooltips will be disabled until the previous tooltip has been opened and closed.\
+To enable the sequentially mode set `sequentially:true` option:
+```typescript
+$("#myImageMap").tooltipsteredImage(
+    {
+        svgUrl:"path/to/svg.svg",
+        sequentially:true,
+        items:[
+            {
+                id:"id-shape-1",
+                template:"#tip-1-template"
+            },
+            {
+                id:"id-shape-2",
+                title:"Some text for the tooltip 2"
+            }
+        ]
+    }
+);
+```
 In order to apply styles and control the state of each step, some css clases are added when each tooltip change of state.\
-The available classes are
+The available classes are:
+
+- tooltipstered-image__step: class to the root element
+- tooltipstered-image__step--waiting: class added when the step is waiting and is disabled
+- tooltipstered-image__step--current: class added when the step is the current but the tooltip hasn't be opened yet
+- tooltipstered-image__step--active: class added when the step is the current and the tooltip of the step is opened
+- tooltipstered-image__step--completed: class added when the tooltip of the step is closed and completed
+- tooltipstered-image__step--open: // class added when the tooltip is open
+- tooltipstered-image__step--disabled: class added when the tooltip is disabled in any state

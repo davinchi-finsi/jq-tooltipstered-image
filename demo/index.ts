@@ -1,16 +1,23 @@
 namespace demo{
-    //$("#map1").jqTooltipsteredImage();
-    $("#demo1").tooltipsteredImage(
+    let $imageMap = $("#myImageMap");
+    $imageMap.tooltipsteredImage(
         {
-            svgUrl:"tortoise.svg",
+            svgUrl:"./tortoise.svg",
+            sequential:true,
             items:[
                 {
-                    id:"eye1",
-                    title:"Some title"
+                    id:"id-shape-1",
+                    title:"This is an eye :)"
+                },
+                {
+                    id:"id-shape-2",
+                    template:"#id-shape-2-template"
                 }
-            ],
-            autoRun:true
+            ]
         }
     );
-    $("#demo1").on("tooltipsteredImage:completed",()=>console.log("Completed"));
+    $imageMap.on("tooltipsteredImage:completed",()=>{
+        alert("Completed!");
+        console.log("Completed");
+    });
 }
