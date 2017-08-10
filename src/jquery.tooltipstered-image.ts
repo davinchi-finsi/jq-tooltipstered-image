@@ -299,7 +299,6 @@
                 completed:"tooltipstered-image--completed"
             },
             svgUrl:"",
-            viewbox:[0,0,100,100],
             svgAttr:{
                 preserveAspectRatio:"xMidYMid meet"
             },
@@ -398,8 +397,12 @@
          * @private
          */
         _processSvgFile:function(documentElement){
-            let stringSvg = new XMLSerializer().serializeToString(documentElement);
-            return stringSvg;
+            if(documentElement) {
+                let stringSvg = new XMLSerializer().serializeToString(documentElement);
+                return stringSvg;
+            }else{
+                throw "[ERROR] TooltipsteredImageError: The requested file is not valid:"+this.options.svgUrl;
+            }
         },
         /**
          * Invoked when the svg file is loaded successfully
@@ -417,7 +420,7 @@
             defer.resolveWith(instance,[svgString]);
         },
         _onGetSvgFileFail:function(error){
-            console.error("TooltipsteredImageError: The svg file could not be loaded");
+            console.error("[Error] TooltipsteredImageError: The svg file could not be loaded");
             throw error;
 
         },
@@ -428,15 +431,20 @@
          */
         _loadSvgFile:function(){
             let defer = $.Deferred();
-            $.ajax({
-                method:"GET",
-                type:"document",
-                url:this.options.svgUrl,
-                _data:{
-                    context:this,//store the instance of the widget
-                    defer:defer
-                }
-            }).then(this._onGetSvgFileSuccess,this._onGetSvgFileFail);
+            if(!!this.options.svgUrl) {
+                $.ajax({
+                    method: "GET",
+                    type: "document",
+                    url: this.options.svgUrl,
+                    _data: {
+                        context: this,//store the instance of the widget
+                        defer: defer
+                    }
+                }).then(this._onGetSvgFileSuccess, this._onGetSvgFileFail);
+            }else{
+                console.error("[ERROR] TooltipsteredImageError: The svgUrl option is obligatory");
+                defer.reject();
+            }
             return defer.promise();
         },
         /**

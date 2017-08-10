@@ -1,12 +1,12 @@
 /**
- * jqQuiz plugin v0.1.0
+ * jqQuiz plugin v0.1.3
  * https://github.com/davinchi-finsi/jq-quiz
  * 
  * Copyright Davinchi and other contributors
  * Released under the MIT license
  * https://github.com/davinchi-finsi/jq-quiz/blob/master/LICENSE
  * 
- * Build: 14/07/2017 15:28
+ * Build: 10/08/2017 15:43
  */
 
 /*! jQuery UI - v1.12.1 - 2017-07-14
