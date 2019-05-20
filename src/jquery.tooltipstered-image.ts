@@ -398,8 +398,9 @@
          */
         _processSvgFile:function(documentElement){
             if(documentElement) {
-                let stringSvg = new XMLSerializer().serializeToString(documentElement);
-                return stringSvg;
+                //let stringSvg = new XMLSerializer().serializeToString(documentElement);
+                //return stringSvg;
+                return documentElement.innerHTML;
             }else{
                 throw "[ERROR] TooltipsteredImageError: The requested file is not valid:"+this.options.svgUrl;
             }
