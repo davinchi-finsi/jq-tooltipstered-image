@@ -400,7 +400,14 @@
             if(documentElement) {
                 //let stringSvg = new XMLSerializer().serializeToString(documentElement);
                 //return stringSvg;
-                return documentElement.innerHTML;
+                let result;
+                if(documentElement.innerHTML){
+                    result = documentElement.innerHTML;
+                } else {
+                    // ie 11
+                    result = new XMLSerializer().serializeToString(documentElement).replace(/^<svg[^>]*>/,"").replace(/<\/svg>/,"");
+                }
+                return result;
             }else{
                 throw "[ERROR] TooltipsteredImageError: The requested file is not valid:"+this.options.svgUrl;
             }
