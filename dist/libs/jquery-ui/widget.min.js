@@ -6,7 +6,7 @@
  * Released under the MIT license
  * https://github.com/davinchi-finsi/jq-quiz/blob/master/LICENSE
  * 
- * Build: 20/05/2019 13:47
+ * Build: 31/03/2020 10:16
  */
 
 /*! jQuery UI - v1.12.1 - 2017-07-14
